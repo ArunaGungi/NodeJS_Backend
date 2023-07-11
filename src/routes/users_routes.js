@@ -19,4 +19,8 @@ userRouter.delete("/deleteUser/:id", (req,res) => {
     userController.deleteUser(req,res);
 })
 
+userRouter.get("/login", (req,res) => {
+    userController.loginValidation(req,res);
+})
+
 module.exports = userRouter;

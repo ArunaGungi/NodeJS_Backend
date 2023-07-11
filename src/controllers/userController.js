@@ -31,7 +31,7 @@ module.exports = {
     const { firstName, lastName, email, password } = req.body;
     var user = await sequelize.models.User.findOne({
       where: {
-        id:id,
+        id: id,
       },
     })
       .then((user) => {
@@ -51,32 +51,67 @@ module.exports = {
         });
       });
   },
-  getAllUsers:async(req,res) => {
-    await sequelize.models.User.findAll().then(async(user) => {
-      res.status(200).send(
-        {
-          code:"200",
-          message:"User Data Fetched Successfully",
-          data:user
-        }
-      )
-    }).catch((err) =>  console.log(err));
+  getAllUsers: async (req, res) => {
+    await sequelize.models.User.findAll()
+      .then(async (user) => {
+        res.status(200).send({
+          code: "200",
+          message: "User Data Fetched Successfully",
+          data: user,
+        });
+      })
+      .catch((err) => console.log(err));
   },
 
-  deleteUser:async(req,res) => {
+  deleteUser: async (req, res) => {
     const id = req.params.id;
-    await sequelize.models.User.findOne({where:{
-      id:id
-    }}).then((user) => {
-      user.destroy({}).then(() => {
-        res.status(200).send({
-          code:200,
-          message:"User Deleted Successfully"
-        })
+    await sequelize.models.User.findOne({
+      where: {
+        id: id,
+      },
+    })
+      .then((user) => {
+        user.destroy({}).then(() => {
+          res.status(200).send({
+            code: 200,
+            message: "User Deleted Successfully",
+          });
+        });
       })
-    }).catch((err) => res.status(400).send({
-      code:400,
-      message:`Error while deleting the data ${err}`
-    }))
-  }
+      .catch((err) =>
+        res.status(400).send({
+          code: 400,
+          message: `Error while deleting the data ${err}`,
+        })
+      );
+  },
+  loginValidation: async (req, res) => {
+    const { email, password } = req.body;
+    console.log("email pwd", email, password);
+    await sequelize.models.User.findOne({
+      where: {
+        email: { [Op.eq]: email },
+      },
+    })
+      .then(async (user) => {
+        if (user) {
+          res.status(200).send({
+            code: 200,
+            message: "Login Successful",
+          });
+        }
+        else {
+          res.status(400).send({
+            code: 200,
+            message: "User does not exist",
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(400).send({
+          code: 400,
+          message: err,
+        });
+      });
+  },
 };
