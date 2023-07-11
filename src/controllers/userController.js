@@ -1,21 +1,23 @@
 const { Op } = require("sequelize");
 const { sequelize } = require("../../config/database");
+const bcrypt = require("bcrypt-nodejs");
 
 module.exports = {
   registerUser: async (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
-    console.log("req body", req.body);
-    var user = await sequelize.models.User.create({
-      firstName,
-      lastName,
-      email,
-      password,
+    const { firstname, lastname, email, password } = req.body;
+    console.log("firstname lastname", firstname, lastname);
+    var salt = bcrypt.genSaltSync(10);
+    hashedPassword = bcrypt.hashSync(password, salt);
+    await sequelize.models.User.create({
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      password: hashedPassword,
     })
       .then((user) => {
         res.status(200).send({
           code: 200,
           message: "User created successfully",
-          data: user,
         });
       })
       .catch((error) => {
@@ -28,8 +30,8 @@ module.exports = {
   updateUser: async (req, res) => {
     const id = req.params.id;
     console.log("id in update users function", id);
-    const { firstName, lastName, email, password } = req.body;
-    var user = await sequelize.models.User.findOne({
+    const { firstname, lastname, email, password } = req.body;
+    await sequelize.models.User.findOne({
       where: {
         id: id,
       },
@@ -87,7 +89,6 @@ module.exports = {
   },
   loginValidation: async (req, res) => {
     const { email, password } = req.body;
-    console.log("email pwd", email, password);
     await sequelize.models.User.findOne({
       where: {
         email: { [Op.eq]: email },
@@ -99,8 +100,7 @@ module.exports = {
             code: 200,
             message: "Login Successful",
           });
-        }
-        else {
+        } else {
           res.status(400).send({
             code: 200,
             message: "User does not exist",

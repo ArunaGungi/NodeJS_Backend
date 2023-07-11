@@ -6,7 +6,7 @@ const userController = require("../controllers/userController");
 userRouter.use(bodyParser.json());
 userRouter.use(cors());
 
-userRouter.post("/registration",(req,res) => {
+userRouter.post("/register",(req,res) => {
     userController.registerUser(req,res);
 });
 userRouter.put("/updateUser/:id", (req,res) => {
