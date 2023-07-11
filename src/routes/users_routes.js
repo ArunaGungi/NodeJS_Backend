@@ -6,8 +6,17 @@ const userController = require("../controllers/userController");
 userRouter.use(bodyParser.json());
 userRouter.use(cors());
 
-userRouter.get("/registration",(req,res) => {
+userRouter.post("/registration",(req,res) => {
     userController.registerUser(req,res);
 });
+userRouter.put("/updateUser/:id", (req,res) => {
+    userController.updateUser(req,res);
+})
+userRouter.get("/getAllUsers", (req,res) => {
+    userController.getAllUsers(req,res);
+})
+userRouter.delete("/deleteUser/:id", (req,res) => {
+    userController.deleteUser(req,res);
+})
 
 module.exports = userRouter;

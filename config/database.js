@@ -8,7 +8,7 @@ const sequelize = new Sequelize(process.parsed.DATABASE_NAME, process.parsed.DAT
     logging:false
 })
 
-sequelize.sync({force:true}).then(() => {
+sequelize.sync({force:false}).then(() => {
     console.log("Drop and re-sync db");
 })
 
