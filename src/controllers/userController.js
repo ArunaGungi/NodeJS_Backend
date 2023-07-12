@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const { sequelize } = require("../../config/database");
-const bcrypt = require("bcrypt-nodejs");
+const bcrypt = require("bcrypt");
+const { generateToken } = require("../utils/jwt");
 
 module.exports = {
   registerUser: async (req, res) => {
@@ -18,6 +19,7 @@ module.exports = {
         res.status(200).send({
           code: 200,
           message: "User created successfully",
+          data: user,
         });
       })
       .catch((error) => {
@@ -96,13 +98,33 @@ module.exports = {
     })
       .then(async (user) => {
         if (user) {
-          res.status(200).send({
-            code: 200,
-            message: "Login Successful",
-          });
+          console.log(
+            "user data check in if condition",
+            password,
+            user.password
+          );
+          console.log(
+            "decrypted password",
+            bcrypt.compareSync(password, user.password)
+          );
+          if (bcrypt.compareSync(password, user.password)) {
+            const token = generateToken(user);
+            console.log("token check", token);
+            user.dataValues.token = token;
+            res.status(200).send({
+              code: 200,
+              message: "Login Successful",
+            });
+          }
+          else {
+            res.status(400).send({
+              code: 400,
+              message: "Wrong password",
+            });
+          }
         } else {
           res.status(400).send({
-            code: 200,
+            code: 400,
             message: "User does not exist",
           });
         }
