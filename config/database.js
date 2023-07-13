@@ -1,4 +1,5 @@
 const {Sequelize} = require("sequelize");
+const categoryModel = require("../models/categories");
 const process = require("dotenv").config();
 const userModel = require("../src/models/user");
 
@@ -13,7 +14,8 @@ sequelize.sync({force:false}).then(() => {
 })
 
 const models = {
-    User:userModel(sequelize, Sequelize.DataTypes)
+    User:userModel(sequelize, Sequelize.DataTypes),
+    Category:categoryModel(sequelize, Sequelize.DataTypes)
 }
 
 module.exports = {sequelize, models};

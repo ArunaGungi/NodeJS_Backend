@@ -109,11 +109,12 @@ module.exports = {
           );
           if (bcrypt.compareSync(password, user.password)) {
             const token = generateToken(user);
-            console.log("token check", token);
+            //console.log("token check", token);
             user.dataValues.token = token;
             res.status(200).send({
               code: 200,
               message: "Login Successful",
+              data:user
             });
           }
           else {
