@@ -6,7 +6,7 @@ const Contact = require("../models/contactsModel");
 //@access public
 
 const getContact = asyncHandler(async (req, res) => {
-    const contacts = await Contact.find({ user_id: req.user.id });
+    const contacts = await Contact.find();
     console.log("contactscontactscontactscontacts",contacts);
     res.status(200).json(contacts);
 })
@@ -17,7 +17,7 @@ const createContact = asyncHandler(async (req, res) => {
     if (!name || !email || !phone) {
         res.status(400);
         throw new Error("All Fields are mandatory");
-    }
+     }
     else {
         const addContacts = await Contact.create({ name, email, phone, user_id: req.user.id });
         res.status(201).json({ message: addContacts });

@@ -3,7 +3,6 @@ const { getContact, createContact, getContactById, updateContactById, deleteCont
 const validateToken = require("../middleware/validateTokenHandler");
 const contactsRouter = express.Router();
 
-contactsRouter.use(validateToken);
 contactsRouter.route("/").get(getContact).post(createContact);
 contactsRouter.route("/:id").get(getContactById).put(updateContactById).delete(deleteContactById);
 
